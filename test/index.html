@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name=renderer content=webkit>
+<title></title>
+
+<body>
+    <script src="./../dist/geojson-seg.js"></script>
+    <script>
+        fetch('./isoline.geojson').then(res => res.json()).then(geojson => {
+            console.log('get data end');
+            const time = 'time';
+            console.time(time);
+            const result = geojsonseg.seg(geojson, 10000);
+            console.timeEnd(time);
+            console.log(result);
+        })
+    </script>
+</body>
+
+</html>
