@@ -7,8 +7,9 @@
 
      fetch('./isoline.geojson').then(res=>res.json()).then(geojson=>{
 
-           const coordinateCount=12000;
-          const geojsons=seg(geojson,coordinateCount);
+          // the count of coordiante one geojson file
+          const coordinateCount=12000;
+          const geojsons=geojsonseg.seg(geojson,coordinateCount);
      })
 
 </script>
@@ -20,13 +21,14 @@
   //ESM
   import {seg} from 'geojson-seg';
 
+  // the count of coordiante one geojson file
   const coordinateCount=12000;
-
   const geojsons=seg(geojson,coordinateCount);
 
 
   //node
   const geojsonseg=require('geojson-seg');
+  // the count of coordiante one geojson file
   const coordinateCount=12000;
   const geojsons=seg(geojson,coordinateCount);
 
