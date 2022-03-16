@@ -1,5 +1,5 @@
 # geojson-seg
-
+## CDN
 ```html
  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/geojson-seg@0.0.2/dist/geojson-seg.min.js"></script>
 
@@ -16,6 +16,13 @@
 
 ```
 
+## NPM
+```shell
+npm i geojson-seg
+# or
+yarn add geojson-seg
+```
+
 ```js
 
   //ESM
@@ -30,6 +37,6 @@
   const geojsonseg=require('geojson-seg');
   // the count of coordiante one geojson file
   const coordinateCount=12000;
-  const geojsons=seg(geojson,coordinateCount);
+  const geojsons=geojsonseg.seg(geojson,coordinateCount);
 
 ```
