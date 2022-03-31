@@ -15,7 +15,9 @@ export function seg(geojson, coordinateCount = 5000) {
         const count = measureCoordianteCount(geojson.features[i]);
         if (count >= coordinateCount) {
             geojsons.push(getGeoJSON([geojson.features[i]], count));
-            console.warn(geojson.features[i], 'is big ,coordinate count >', coordinateCount);
+            if (count > coordinateCount) {
+                console.warn(geojson.features[i], `is big ,coordinate count(${count}) >${coordinateCount}`);
+            }
             continue;
         }
         if (count + totalCount <= coordinateCount) {
@@ -24,7 +26,7 @@ export function seg(geojson, coordinateCount = 5000) {
         } else {
             geojsons.push(getGeoJSON(features, totalCount));
             features = [geojson.features[i]];
-            totalCount = 0;
+            totalCount = count;
         }
     }
     if (features.length) {
@@ -40,20 +42,23 @@ function measureCoordianteCount(feature) {
     if (feature.geometry && feature.geometry.coordinates && Array.isArray(feature.geometry.coordinates)) {
         const { coordinates } = feature.geometry;
         if (Array.isArray(coordinates[0])) {
-            return forEachRing(coordinates, 0);
+            return forEachRing(coordinates);
         }
+        // point
         return 1;
     }
     return 0;
 }
 
-function forEachRing(coorindates, count = 0) {
+function forEachRing(coorindates) {
+    // multipoint,linestring
     if (!Array.isArray(coorindates[0][0])) {
         return coorindates.length;
     }
     // MultiLineString,Polyogn,MultiPolygon
+    let count = 0;
     for (let i = 0, len = coorindates.length; i < len; i++) {
-        count += forEachRing(coorindates[i], count);
+        count += forEachRing(coorindates[i]);
     }
     return count;
 }
