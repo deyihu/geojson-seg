@@ -1,6 +1,6 @@
 {
   "name": "geojson-seg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "module": "dist/geojson-seg.es.js",
   "main": "dist/geojson-seg.js",
