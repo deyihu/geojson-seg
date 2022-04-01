@@ -38,7 +38,7 @@ export function seg(geojson, coordinateCount = 5000) {
 // const APPLICATION_JSON = { type: 'application/json' };
 // const MB_SIZE = 1024 * 1024;
 
-function measureCoordianteCount(feature) {
+export function measureCoordianteCount(feature) {
     if (feature.geometry && feature.geometry.coordinates && Array.isArray(feature.geometry.coordinates)) {
         const { coordinates } = feature.geometry;
         if (Array.isArray(coordinates[0])) {
@@ -50,15 +50,15 @@ function measureCoordianteCount(feature) {
     return 0;
 }
 
-function forEachRing(coorindates) {
+function forEachRing(coordinates) {
     // multipoint,linestring
-    if (!Array.isArray(coorindates[0][0])) {
-        return coorindates.length;
+    if (!Array.isArray(coordinates[0][0])) {
+        return coordinates.length;
     }
     // MultiLineString,Polyogn,MultiPolygon
     let count = 0;
-    for (let i = 0, len = coorindates.length; i < len; i++) {
-        count += forEachRing(coorindates[i]);
+    for (let i = 0, len = coordinates.length; i < len; i++) {
+        count += forEachRing(coordinates[i]);
     }
     return count;
 }
