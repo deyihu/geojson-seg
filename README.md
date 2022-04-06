@@ -1,7 +1,7 @@
 # geojson-seg
 ## CDN
 ```html
- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/geojson-seg@0.0.2/dist/geojson-seg.min.js"></script>
+ <script type="text/javascript" src="https://unpkg.com/geojson-seg@0.0.4/dist/geojson-seg.min.js"></script>
 
  <script>
 
