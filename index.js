@@ -5,6 +5,9 @@
  * @returns
  */
 export function seg(geojson, coordinateCount = 5000) {
+    if (isArray(geojson)) {
+        return arraySeg(geojson.data || geojson.RECORDS || geojson, coordinateCount);
+    }
     if (!geojson || !geojson.features || geojson.features.length === 0) {
         return [];
     }
@@ -15,9 +18,9 @@ export function seg(geojson, coordinateCount = 5000) {
         const count = measureCoordianteCount(geojson.features[i]);
         if (count >= coordinateCount) {
             geojsons.push(getGeoJSON([geojson.features[i]], count));
-            if (count > coordinateCount) {
-                console.warn(geojson.features[i], `is big ,coordinate count(${count}) >${coordinateCount}`);
-            }
+            // if (count > coordinateCount) {
+            //     console.warn(geojson.features[i], `is big ,coordinate count(${count}) >${coordinateCount}`);
+            // }
             continue;
         }
         if (count + totalCount <= coordinateCount) {
@@ -33,6 +36,55 @@ export function seg(geojson, coordinateCount = 5000) {
         geojsons.push(getGeoJSON(features, totalCount));
     }
     return geojsons;
+}
+
+function isArray(geojson) {
+    return Array.isArray(geojson) || Array.isArray(geojson.data) || Array.isArray(geojson.RECORDS);
+}
+
+function arraySeg(data, coordinateCount) {
+    const result = [], errorData = [];
+    let features = [], totalCount = 0;
+    for (let i = 0, len = data.length; i < len; i++) {
+        const d = data[i];
+        const { lnglat, lnglats, coordinates, fanwei, zuobiao, xy, xys, location } = (d || {});
+        const ll = lnglats || lnglat || coordinates || fanwei || zuobiao || xy || xys || location;
+        if (!ll || ll.indexOf(',') === -1 || !(typeof ll === 'string') || ll.indexOf('encode:') > -1) {
+            errorData.push(d);
+            continue;
+        }
+        let count = 0;
+        if (ll.replaceAll) {
+            const strLen = ll.length;
+            const str = ll.replaceAll(',', '');
+            count = strLen - str.length;
+        } else {
+            count = ll.split(',').length - 1;
+        }
+        if (ll.indexOf(';') === -1) {
+            count /= 2;
+        }
+        d._coordinateCount = count;
+        if (count >= coordinateCount) {
+            result.push([d]);
+            continue;
+        }
+        if (totalCount + count <= coordinateCount) {
+            features.push(d);
+            totalCount += count;
+        } else {
+            result.push(features);
+            features = [d];
+            totalCount = count;
+        }
+    }
+    if (features.length) {
+        result.push(features);
+    }
+    if (errorData.length) {
+        result.push(errorData);
+    }
+    return result;
 }
 
 // const APPLICATION_JSON = { type: 'application/json' };
