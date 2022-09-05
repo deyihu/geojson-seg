@@ -64,7 +64,7 @@ function arraySeg(data, coordinateCount) {
         if (ll.indexOf(';') === -1) {
             count /= 2;
         }
-        d._coordinateCount = count;
+        // d._coordinateCount = count;
         if (count >= coordinateCount) {
             result.push([d]);
             continue;
